@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/runsagents/memory-ledger/schemas/memory-entry.schema.json",
+  "title": "Memory ledger entry",
+  "description": "The data contract represented by a memory entry's YAML frontmatter.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fact",
+    "source",
+    "scope",
+    "confidence",
+    "created",
+    "may-this-authorize-action"
+  ],
+  "properties": {
+    "fact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference"],
+      "properties": {
+        "kind": {
+          "enum": ["user-said", "observed", "inferred"]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A retrievable conversation, file, URL, command output, or inference basis."
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level"],
+      "properties": {
+        "level": {
+          "enum": ["project", "global"]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required project identifier when level is project; forbidden when global."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"level": {"const": "project"}},
+            "required": ["level"]
+          },
+          "then": {"required": ["reference"]},
+          "else": {"not": {"required": ["reference"]}}
+        }
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "expires": {
+      "type": "string",
+      "format": "date"
+    },
+    "review-by": {
+      "type": "string",
+      "format": "date"
+    },
+    "superseded-by": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "may-this-authorize-action": {
+      "type": "boolean"
+    },
+    "synthetic": {
+      "type": "boolean",
+      "description": "Marks fixtures and demonstrations that are not real memories."
+    }
+  },
+  "oneOf": [
+    {
+      "required": ["expires"],
+      "not": {"required": ["review-by"]}
+    },
+    {
+      "required": ["review-by"],
+      "not": {"required": ["expires"]}
+    }
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {"may-this-authorize-action": {"const": true}},
+        "required": ["may-this-authorize-action"]
+      },
+      "then": {
+        "required": ["expires"],
+        "not": {"required": ["review-by"]},
+        "properties": {
+          "confidence": {"minimum": 0.9},
+          "source": {
+            "properties": {
+              "kind": {"enum": ["user-said", "observed"]}
+            }
+          },
+          "scope": {
+            "properties": {
+              "level": {"const": "project"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

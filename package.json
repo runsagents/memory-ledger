@@ -1,0 +1,32 @@
+{
+  "name": "memory-ledger",
+  "version": "1.0.0",
+  "description": "Agent memory with source, scope, expiry, and action-authorization provenance.",
+  "type": "module",
+  "private": false,
+  "author": "Shakhzod (runsagents)",
+  "license": "CC0-1.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate:examples": "node scripts/validate-entry.mjs examples/memories/*.md",
+    "audit:examples": "node scripts/audit-ledger.mjs examples/memories --as-of 2026-07-14 --scope project:github.com/runsagents/memory-ledger"
+  },
+  "bin": {
+    "memory-ledger-validate": "scripts/validate-entry.mjs",
+    "memory-ledger-audit": "scripts/audit-ledger.mjs"
+  },
+  "files": [
+    "README.md",
+    "SKILL.md",
+    "CHANGELOG.md",
+    "ATTRIBUTION.md",
+    "LICENSE",
+    "schemas",
+    "templates",
+    "scripts",
+    "examples"
+  ]
+}
