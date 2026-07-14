@@ -3,6 +3,23 @@ Memory that may influence an action is authorization state and needs stronger pr
 
 # memory-ledger
 
+| | |
+|---|---|
+| **Problem** | A stale unscoped memory can outlive an approval and trigger the wrong consequential action |
+| **Theory** | [Data provenance](https://www.w3.org/TR/prov-o/) records the source and context needed to judge whether information is trustworthy |
+| **This tool** | A memory format and auditor enforce source scope confidence expiry supersession and action eligibility |
+
+```mermaid
+flowchart LR
+  A[Atomic memory] --> B[Source and scope]
+  B --> C[Expiry or review date]
+  C --> D[Supersession chain]
+  D --> E[Validation and audit]
+  E --> F[Action eligibility review]
+  F --> G[Reread source before action]
+```
+
+
 ## A stale approval becomes an incident
 
 Consider a generic failure mode: a user approves a release for a limited window. An agent saves
