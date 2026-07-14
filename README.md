@@ -152,3 +152,7 @@ the context window and making state explicit. This project is an independent imp
 12-Factor Agents code or text is included. See [`ATTRIBUTION.md`](ATTRIBUTION.md).
 
 Released under [CC0 1.0 Universal](LICENSE).
+
+## Terminology & prior art
+This pattern uses [data provenance](https://www.w3.org/TR/prov-o/), related to [agent memory streams](https://arxiv.org/abs/2304.03442).
+This implementation adds scope, expiry, and an explicit flag controlling whether a memory may authorize action.
